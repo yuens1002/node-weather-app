@@ -24,13 +24,13 @@ module.exports = {
                 Address: body.results[0].locations[0].street,
                 Latitude: body.results[0].locations[0].latLng.lat,
                 Longitude: body.results[0].locations[0].latLng.lng
-              })
+              });
             } catch(e) {
               reject('Mapquest: ' + JSON.stringify(body, undefined, 2));
             }
           },
           [true]: () => {
-            reject('unable to connect to mapquest.api')
+            reject('unable to connect to mapquest.api');
           }
         })[Boolean(error)]();
       });

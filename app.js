@@ -21,8 +21,6 @@ if (argv.a === '') {
   return;
 }
 
-// geocode.getGeocode(argv.a)
-
 geocode.getGeocode(argv.a)
   .then (res => {
     darksky.getWeather({lat:res.Latitude,
@@ -35,18 +33,3 @@ geocode.getGeocode(argv.a)
       })
   })
   .catch (error => console.log(error));
-
-// geocode.getGeocode(argv.a, (errMsg, geoResults) => {
-//   if (errMsg) {
-//     console.log(errMsg);
-//   } else {
-//     darksky.getWeather({lat:geoResults.Latitude,
-//       long:geoResults.Longitude}, (errMsg, wResults) => {
-//         if (errMsg) {
-//           console.log(errMsg);
-//         } else {
-//           console.log(`the temperature at (${geoResults.Address}) is ${wResults.temperature} F currently, but it feels like ${wResults.apparentTemperature} F`)
-//         }
-//       })
-//   }
-// })
