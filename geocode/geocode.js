@@ -18,10 +18,15 @@ module.exports = {
         ({
           [false]: () => {
             try {
-              (body.results[0].locations[0].street === '') ?
+              (body.results[0].locations.length === 0) ?
               reject('no address found') :
               resolve({
-                Address: body.results[0].locations[0].street,
+                Address: {
+                  street: body.results[0].locations[0].street,
+                  city: body.results[0].locations[0].adminArea5,
+                  state: body.results[0].locations[0].adminArea3,
+                  zip: body.results[0].locations[0].postalCode
+                },
                 Latitude: body.results[0].locations[0].latLng.lat,
                 Longitude: body.results[0].locations[0].latLng.lng
               });

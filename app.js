@@ -24,5 +24,5 @@ if (argv.a === '') {
 geocode.getGeocode(argv.a).then (res => {
   return darksky.getWeather(res);
 }).then (res => {
-  console.log(`the temperature at (${res.address}) is ${res.weather.temperature} F currently, but it feels like ${res.weather.apparentTemperature} F`)
+  console.log(`the temperature at ${res.address.street} ${res.address.city}, ${res.address.state} ${res.address.zip} is ${res.weather.temperature} F currently, but it feels like ${res.weather.apparentTemperature} F`)
 }).catch (error => console.log(error));
