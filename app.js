@@ -1,6 +1,5 @@
 const yargs = require('yargs');
 const axios = require('axios');
-const readline = require('readline');
 
 const MQurl = 'http://www.mapquestapi.com/geocoding/v1/address?';
 const MQkey = '0aSgK7RwJNt2FH7Zaq65yPQYKlywr3QY';
@@ -9,13 +8,12 @@ const DSkey = 'b431925c1daa955d88b36b219e6fb858';
 const DSurl = 'https://api.darksky.net/forecast/';
 const results = {};
 
-
 const argv = yargs
   .options({
     a: {
       demand: true,
       alias: 'address',
-      describe: 'address to fetch weather for',
+      describe: 'an address to fetch weather',
       string: true
     }
   })
@@ -30,17 +28,21 @@ if (argv.a === '') {
 }
 
 axios.get(MQurlStr+argv.a).then(res => {
-  results.mqRes = {
-    Address: {
-      street: res.data.results[0].locations[0].street,
-      city: res.data.results[0].locations[0].adminArea5,
-      state: res.data.results[0].locations[0].adminArea3,
-      zip: res.data.results[0].locations[0].postalCode
-    },
-    Latitude: res.data.results[0].locations[0].latLng.lat,
-    Longitude: res.data.results[0].locations[0].latLng.lng
-  };
-  return axios.get(`${DSurl}${DSkey}/${results.mqRes.Latitude},${results.mqRes.Longitude}`);
+  if (res.data.results[0].locations[0].street = ' ') {
+    throw new Error('address not found')
+  } else {
+    results.mqRes = {
+      Address: {
+        street: res.data.results[0].locations[0].street,
+        city: res.data.results[0].locations[0].adminArea5,
+        state: res.data.results[0].locations[0].adminArea3,
+        zip: res.data.results[0].locations[0].postalCode
+      },
+      Latitude: res.data.results[0].locations[0].latLng.lat,
+      Longitude: res.data.results[0].locations[0].latLng.lng
+    };
+    return axios.get(`${DSurl}${DSkey}/${results.mqRes.Latitude},${results.mqRes.Longitude}`);
+  }
 }).then(res => {
   results.dsRes = {
     weather: res.data.currently
@@ -50,6 +52,11 @@ axios.get(MQurlStr+argv.a).then(res => {
   if (error.code === 'ENOTFOUND') {
     console.log('can\'t connect to api' + ' ' + error.host);
   } else {
-    console.log(`check the api key used here: ${error.response.config.url}`);
+    try {
+      console.log(`check the api key used here: ${error.response.config.url}`);
+    }
+    catch (e) {
+      console.log(error.message)
+    }
   }
 });
