@@ -21,14 +21,14 @@ const argv = yargs
   .alias('help', 'h')
   .argv;
 
-//exit program if an empty string for addrss is submitted
+//exit program if an empty string for address is submitted
 if (argv.a === '') {
   console.log('An address can not be blink or empty');
   return;
 }
 
 axios.get(MQurlStr+argv.a).then(res => {
-  if (res.data.results[0].locations[0].street = ' ') {
+  if (res.data.results[0].locations[0].street === '') {
     throw new Error('address not found')
   } else {
     results.mqRes = {
