@@ -15,7 +15,7 @@ const argv = yargs
   .alias('help', 'h')
   .argv;
 
-//exit program if an empty string for addrss is submitted
+//exit program if address input is empty to avoid api request
 if (argv.a === '') {
   console.log('An address can not be blink or empty');
 } else {
