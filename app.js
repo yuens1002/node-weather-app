@@ -18,11 +18,10 @@ const argv = yargs
 //exit program if an empty string for addrss is submitted
 if (argv.a === '') {
   console.log('An address can not be blink or empty');
-  return;
+} else {
+  geocode.getGeocode(argv.a).then (res => {
+    return darksky.getWeather(res);
+  }).then (res => {
+    console.log(`the temperature at (${res.address}) is ${res.weather.temperature} F currently, but it feels like ${res.weather.apparentTemperature} F`)
+  }).catch (error => console.log(error));
 }
-
-geocode.getGeocode(argv.a).then (res => {
-  return darksky.getWeather(res);
-}).then (res => {
-  console.log(`the temperature at (${res.address}) is ${res.weather.temperature} F currently, but it feels like ${res.weather.apparentTemperature} F`)
-}).catch (error => console.log(error));
